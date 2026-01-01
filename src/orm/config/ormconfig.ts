@@ -1,19 +1,16 @@
 import { ConnectionOptions } from 'typeorm';
+import path from 'path';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 const config: ConnectionOptions = {
   type: 'postgres',
   name: 'default',
-  host: process.env.PG_HOST,
-  port: Number(process.env.PG_PORT),
-  username: process.env.POSTGRES_USER,
-  password: process.env.POSTGRES_PASSWORD,
-  database: process.env.POSTGRES_DB,
+  url: process.env.DATABASE_URL,
   synchronize: false,
   logging: false,
-  entities: ['src/orm/entities/**/*.ts'],
-  migrations: ['src/orm/migrations/**/*.ts'],
-  subscribers: ['src/orm/subscriber/**/*.ts'],
+  entities: [path.join(__dirname, '../entities/**/*.{ts,js}')],
+  migrations: [path.join(__dirname, '../migrations/**/*.{ts,js}')],
+  subscribers: [path.join(__dirname, '../subscriber/**/*.{ts,js}')],
   cli: {
     entitiesDir: 'src/orm/entities',
     migrationsDir: 'src/orm/migrations',

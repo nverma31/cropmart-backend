@@ -1,12 +1,12 @@
 {
-  "name": "express-typescript-typeorm-boilerplate",
+  "name": "cropmart-backend",
   "version": "1.0.0",
   "description": "RESTful API boilerplate with Typescript, TypeORM, ExpressJs & Mocha.",
   "scripts": {
     "dev": "debug=* NODE_PATH=./src ts-node-dev --respawn ./src/index.ts",
     "build": "rimraf dist && tsc",
     "start": "NODE_PATH=./dist node ./dist/index.js",
-    "prepare": "husky install",
+    "prepare": "husky install || true",
     "lint": "eslint --max-warnings 0 . && npm run tsc",
     "lint-fix": "eslint --fix .",
     "lint-staged-husky": "lint-staged",
@@ -36,6 +36,7 @@
     "morgan": "^1.10.0",
     "pg": "^8.7.3",
     "reflect-metadata": "^0.1.13",
+    "sqlite3": "^5.1.7",
     "typeorm": "^0.2.45",
     "typeorm-naming-strategies": "^4.0.0",
     "validator": "^13.7.0"

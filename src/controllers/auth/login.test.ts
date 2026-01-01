@@ -15,7 +15,6 @@ describe('Login', () => {
 
   const userPassword = 'pass1';
   const user = new User();
-  user.username = 'Badger';
   user.name = 'Brandon Mayhew';
   user.email = 'brandon.mayhew@test.com';
   user.password = userPassword;

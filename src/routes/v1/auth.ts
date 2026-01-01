@@ -1,13 +1,16 @@
 import { Router } from 'express';
 
-import { login, register, changePassword } from 'controllers/auth';
-import { checkJwt } from 'middleware/checkJwt';
-import { validatorLogin, validatorRegister, validatorChangePassword } from 'middleware/validation/auth';
+import { adminLogin } from 'controllers/auth/adminLogin';
+import { requestOtp } from 'controllers/auth/requestOtp';
+import { verifyOtp } from 'controllers/auth/verifyOtp';
 
 const router = Router();
 
-router.post('/login', [validatorLogin], login);
-router.post('/register', [validatorRegister], register);
-router.post('/change-password', [checkJwt, validatorChangePassword], changePassword);
+// Mobile App Authentication (OTP-based)
+router.post('/request-otp', requestOtp);
+router.post('/verify-otp', verifyOtp);
+
+// Admin Authentication (Email/Password)
+router.post('/admin/login', adminLogin);
 
 export default router;

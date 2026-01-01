@@ -1,21 +1,40 @@
 import { Request, Response, NextFunction } from 'express';
-import { getRepository } from 'typeorm';
+import { getRepository, Not } from 'typeorm';
+import validator from 'validator';
 
 import { User } from 'orm/entities/users/User';
 import { CustomError } from 'utils/response/custom-error/CustomError';
 import { ErrorValidation } from 'utils/response/custom-error/types';
 
 export const validatorEdit = async (req: Request, res: Response, next: NextFunction) => {
-  let { username, name } = req.body;
+  const { email, phone, name } = req.body;
+  const userId = parseInt(req.params.id);
   const errorsValidation: ErrorValidation[] = [];
   const userRepository = getRepository(User);
 
-  username = !username ? '' : username;
-  name = !name ? '' : name;
+  // Validate email format if provided
+  if (email && !validator.isEmail(email)) {
+    errorsValidation.push({ email: 'Invalid email format' });
+  }
 
-  const user = await userRepository.findOne({ username });
-  if (user) {
-    errorsValidation.push({ username: `Username '${username}' already exists` });
+  // Check if email is already taken by another user
+  if (email) {
+    const existingEmailUser = await userRepository.findOne({
+      where: { email, id: Not(userId) }
+    });
+    if (existingEmailUser) {
+      errorsValidation.push({ email: `Email '${email}' is already in use` });
+    }
+  }
+
+  // Check if phone is already taken by another user
+  if (phone) {
+    const existingPhoneUser = await userRepository.findOne({
+      where: { phone, id: Not(userId) }
+    });
+    if (existingPhoneUser) {
+      errorsValidation.push({ phone: `Phone '${phone}' is already in use` });
+    }
   }
 
   if (errorsValidation.length !== 0) {

@@ -6,7 +6,7 @@ import { CustomError } from 'utils/response/custom-error/CustomError';
 
 export const edit = async (req: Request, res: Response, next: NextFunction) => {
   const id = req.params.id;
-  const { username, name } = req.body;
+  const { name, email, phone, isActive } = req.body;
 
   const userRepository = getRepository(User);
   try {
@@ -17,14 +17,17 @@ export const edit = async (req: Request, res: Response, next: NextFunction) => {
       return next(customError);
     }
 
-    user.username = username;
-    user.name = name;
+    // Update only provided fields
+    if (name !== undefined) user.name = name;
+    if (email !== undefined) user.email = email;
+    if (phone !== undefined) user.phone = phone;
+    if (isActive !== undefined) user.isActive = isActive;
 
     try {
       await userRepository.save(user);
       res.customSuccess(200, 'User successfully saved.');
     } catch (err) {
-      const customError = new CustomError(409, 'Raw', `User '${user.email}' can't be saved.`, null, err);
+      const customError = new CustomError(409, 'Raw', `User can't be saved.`, null, err);
       return next(customError);
     }
   } catch (err) {

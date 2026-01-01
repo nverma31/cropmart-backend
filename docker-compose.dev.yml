@@ -16,6 +16,8 @@ services:
     entrypoint: /bin/sh './scripts/be-node-dev.sh'
     env_file:
       - .env
+    environment:
+      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db_boilerplate:5432/${POSTGRES_DB}
     ports:
       - '4000:4000'
     depends_on:

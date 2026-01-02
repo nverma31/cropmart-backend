@@ -16,8 +16,22 @@ import routes from './routes';
 
 export const app = express();
 
+const allowedOrigins = ['https://cropmart-portal.vercel.app', 'http://localhost:3000'];
+
+if (process.env.CORS_ORIGIN) {
+  process.env.CORS_ORIGIN.split(',').forEach((origin) => {
+    allowedOrigins.push(origin.trim());
+  });
+}
+
 const corsOptions = {
-  origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : '*',
+  origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
 };
 

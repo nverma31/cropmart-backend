@@ -1,22 +1,33 @@
 import { Router } from 'express';
 
 import { list, show, update } from 'controllers/farmers';
+import { createFarmer } from 'controllers/farmers/createFarmer';
 import { checkJwt } from 'middleware/checkJwt';
 import { checkFarmerAccess } from 'middleware/checkOwnership';
 import { checkRole } from 'middleware/checkRole';
+import { validatorUpdateFarmer, validatorCreateFarmer } from 'middleware/validation/farmers';
 import { Roles } from 'orm/entities/users/types';
 
 const router = Router();
+
+// Create farmer (Admin only)
+router.post('/', [checkJwt, checkRole([Roles.ADMIN]), validatorCreateFarmer], createFarmer);
 
 // List farmers (Intermediaries see their linked farmers - logic matches all for now, to be refined)
 router.get('/', [checkJwt, checkRole([Roles.ADMIN, Roles.INTERMEDIARY])], list);
 
 // Get farmer details
-router.get('/:id([0-9]+)', [checkJwt, checkRole([Roles.ADMIN, Roles.INTERMEDIARY, Roles.FARMER]), checkFarmerAccess], show);
-
-import { validatorUpdateFarmer } from 'middleware/validation/farmers';
+router.get(
+  '/:id([0-9]+)',
+  [checkJwt, checkRole([Roles.ADMIN, Roles.INTERMEDIARY, Roles.FARMER]), checkFarmerAccess],
+  show,
+);
 
 // Update farmer profile
-router.patch('/:id([0-9]+)', [checkJwt, checkRole([Roles.ADMIN, Roles.FARMER]), checkFarmerAccess, validatorUpdateFarmer], update);
+router.patch(
+  '/:id([0-9]+)',
+  [checkJwt, checkRole([Roles.ADMIN, Roles.FARMER]), checkFarmerAccess, validatorUpdateFarmer],
+  update,
+);
 
 export default router;

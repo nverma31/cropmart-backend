@@ -12,7 +12,6 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "resolveJsonModule": true,
-    "types": ["node"],
     "typeRoots": ["./src/types", "./node_modules/@types"],
     "baseUrl": "src/",
     "noImplicitReturns": true,

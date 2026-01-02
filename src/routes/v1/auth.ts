@@ -1,6 +1,7 @@
 import { Router } from 'express';
 
 import { adminLogin } from 'controllers/auth/adminLogin';
+import { debugAdmin } from 'controllers/auth/debugAdmin';
 import { requestOtp } from 'controllers/auth/requestOtp';
 import { verifyOtp } from 'controllers/auth/verifyOtp';
 
@@ -12,5 +13,6 @@ router.post('/verify-otp', verifyOtp);
 
 // Admin Authentication (Email/Password)
 router.post('/admin/login', adminLogin);
+router.get('/admin/debug', debugAdmin);
 
 export default router;

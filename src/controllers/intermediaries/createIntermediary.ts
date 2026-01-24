@@ -64,6 +64,7 @@ export const createIntermediary = async (req: Request, res: Response, next: Next
       pincode: savedIntermediary.pincode,
     });
   } catch (err) {
+    console.error('Intermediary creation error:', err);
     await queryRunner.rollbackTransaction();
     const customError = new CustomError(500, 'Raw', 'Error creating intermediary', null, err);
     return next(customError);
